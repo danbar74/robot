@@ -1,0 +1,6 @@
+### IntelliJ IDEA
+.idea/
+rea-robot.iml
+
+### Maven
+target/
