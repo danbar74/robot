@@ -34,6 +34,13 @@
 			<fileMode>0744</fileMode>
 			<outputDirectory>bin</outputDirectory>
 		</fileSet>
+		<fileSet>
+			<directory>src/main/simulations</directory>
+			<includes>
+				<include>*</include>
+			</includes>
+			<outputDirectory>simulations</outputDirectory>
+		</fileSet>
 	</fileSets>
 
 	<dependencySets>
