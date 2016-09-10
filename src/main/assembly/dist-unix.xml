@@ -20,11 +20,11 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>src/main/bin</directory>
+			<directory>src/main/conf</directory>
 			<includes>
-				<include>*.conf</include>
+				<include>*</include>
 			</includes>
-			<outputDirectory>bin</outputDirectory>
+			<outputDirectory>conf</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>src/main/bin</directory>
@@ -32,7 +32,7 @@
 				<include>*.sh</include>
 			</includes>
 			<fileMode>0744</fileMode>
-			<outputDirectory>bin</outputDirectory>
+			<outputDirectory>./</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>src/main/simulations</directory>
