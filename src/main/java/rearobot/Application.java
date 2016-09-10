@@ -70,13 +70,15 @@ public class Application {
             throw new ApplicationException(String.format("Input file '%s' does not exist.", path.toAbsolutePath()));
         }
         try {
-            Files.lines(path, StandardCharsets.UTF_8).forEach(line -> {
-                try {
-                    CommandDefinitionParser.parse(line).apply(robot);
-                } catch (InvalidCommandException e) {
-                    // Ignore invalid command silently and continue processing input file.
-                }
-            });
+            Files.lines(path, StandardCharsets.UTF_8)
+                    .filter(line -> line.trim().isEmpty())
+                    .forEach(line -> {
+                        try {
+                            CommandDefinitionParser.parse(line).apply(robot);
+                        } catch (InvalidCommandException e) {
+                            // Ignore invalid command silently and continue processing input file.
+                        }
+                    });
         } catch (IOException e) {
             throw new ApplicationException("Unable to read input file.");
         }
