@@ -8,8 +8,8 @@ public class Table {
     private final int sizeY;
 
     /**
-     * Creates a table with with coordinate space, where south-west is {@code [1, 1]}
-     * and north-east is {@code [sizeX, sizeY]}.
+     * Creates a table with with coordinate space, where south-west is {@code [0, 0]}
+     * and north-east is {@code [sizeX - 1, sizeY - 1]}.
      *
      * @param sizeX vertical size
      * @param sizeY horizontal size
@@ -28,7 +28,12 @@ public class Table {
      */
     public boolean contains(Coordinates coordinates) {
         checkNotNull(coordinates, "coordinates must not be NULL");
-        return coordinates.getX() > 0 && coordinates.getX() <= sizeX
-                && coordinates.getY() > 0 && coordinates.getY() <= sizeY;
+        return coordinates.getX() >= 0 && coordinates.getX() < sizeX
+                && coordinates.getY() >= 0 && coordinates.getY() < sizeY;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + sizeX + " x " + sizeY + ")";
     }
 }

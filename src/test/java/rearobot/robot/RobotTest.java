@@ -17,15 +17,22 @@ public class RobotTest {
     private static final String REPORT_ROBOT_NOT_PLACED = "Not placed on the table yet";
 
     private Robot robot;
+    private TestReportWriter reportWriter;
 
     @Before
     public void before() {
-        robot = new Robot(new Table(5, 5));
+        reportWriter = new TestReportWriter();
+        robot = new Robot(new Table(5, 5), reportWriter);
     }
 
     @Test(expected = NullPointerException.class)
-    public void shouldThrowExceptionWhenCreatingRobotWithNullTableTop() {
-        new Robot(null);
+    public void shouldThrowExceptionWhenCreatingRobotWithNullTable() {
+        new Robot(null, report -> {});
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void shouldThrowExceptionWhenCreatingRobotWithNullReportWriter() {
+        new Robot(new Table(5, 5), null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -36,13 +43,15 @@ public class RobotTest {
     @Test
     public void shouldNotPlaceWhenCoordinatesDoNotExistOnTheTable() {
         assertThat(robot.place(new Coordinates(10, 3), NORTH), is(false));
-        assertThat(robot.report(), is(REPORT_ROBOT_NOT_PLACED));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is(REPORT_ROBOT_NOT_PLACED));
     }
 
     @Test
     public void shouldPlace() {
-        assertThat(robot.place(new Coordinates(3, 5), NORTH), is(true));
-        assertThat(robot.report(), is(not(REPORT_ROBOT_NOT_PLACED)));
+        assertThat(robot.place(new Coordinates(2, 4), NORTH), is(true));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is(not(REPORT_ROBOT_NOT_PLACED)));
     }
 
     @Test
@@ -53,52 +62,61 @@ public class RobotTest {
     @Test
     public void shouldNotMoveToPreventFallingOffTheTable() {
         robot.place(new Coordinates(5, 5), NORTH);
-        String reportBeforeMoving = robot.report();
+        robot.report();
+        String reportBeforeMoving = reportWriter.mostRecentReport();
         assertThat(robot.move(), is(false));
-        assertThat(robot.report(), is(reportBeforeMoving));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is(reportBeforeMoving));
     }
 
     @Test
     public void shouldMove() {
         robot.place(new Coordinates(1, 1), EAST);
         assertThat(robot.move(), is(true));
-        assertThat(robot.report(), is("2,1,EAST"));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is("2,1,EAST"));
     }
 
     @Test
     public void shouldNotRotateLeftWhenNotPlaced() {
         assertThat(robot.left(), is(false));
-        assertThat(robot.report(), is(REPORT_ROBOT_NOT_PLACED));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is(REPORT_ROBOT_NOT_PLACED));
     }
 
     @Test
     public void shouldRotateLeft() {
         robot.place(new Coordinates(2, 3), NORTH);
         assertThat(robot.left(), is(true));
-        assertThat(robot.report(), is("2,3,WEST"));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is("2,3,WEST"));
     }
 
     @Test
     public void shouldNotRotateRightWhenNotPlaced() {
         assertThat(robot.right(), is(false));
-        assertThat(robot.report(), is(REPORT_ROBOT_NOT_PLACED));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is(REPORT_ROBOT_NOT_PLACED));
     }
 
     @Test
     public void shouldRotateRight() {
         robot.place(new Coordinates(2, 3), SOUTH);
         assertThat(robot.right(), is(true));
-        assertThat(robot.report(), is("2,3,WEST"));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is("2,3,WEST"));
     }
 
     @Test
     public void shouldReportNotPlacedOnTheTableYetWhenNotPlaced() {
-        assertThat(robot.report(), is(REPORT_ROBOT_NOT_PLACED));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is(REPORT_ROBOT_NOT_PLACED));
     }
 
     @Test
     public void shouldReportCurrentCoordinatesAndFacingDirection() {
         robot.place(new Coordinates(1, 2), WEST);
-        assertThat(robot.report(), is("1,2,WEST"));
+        robot.report();
+        assertThat(reportWriter.mostRecentReport(), is("1,2,WEST"));
     }
 }

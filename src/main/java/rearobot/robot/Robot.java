@@ -8,22 +8,25 @@ import static rearobot.Preconditions.checkNotNull;
 
 public class Robot {
     private final Table table;
+    private final ReportWriter reportWriter;
     private Coordinates coordinates;
     private Direction facingDirection;
 
     /**
      * Creates a robot.
      *
-     * @param table the table this robot can move around
+     * @param table the table this robot can move on
+     * @param reportWriter report writer for this robot, specifies output for reporting
      *
-     * @throws NullPointerException {@code table} is NULL
+     * @throws NullPointerException {@code table} or {@code reportWriter} is NULL
      */
-    public Robot(Table table) {
-        this.table = checkNotNull(table, "Specified table is NULL");
+    public Robot(Table table, ReportWriter reportWriter) {
+        this.table = checkNotNull(table, "table must not be NULL");
+        this.reportWriter = checkNotNull(reportWriter, "report writer must not be NULL");
     }
 
     /**
-     * Places the robot on the table.
+     * Places/relocates the robot on the table.
      *
      * @param coordinates new coordinates
      * @param facingDirection new facing direction
@@ -31,7 +34,7 @@ public class Robot {
      * @return {@code true} if the robot has been placed on the table successfully,
      * {@code false} otherwise ({@code coordinates} do not exist on the table)
      *
-     * @throws NullPointerException <code>table</code> is NULL
+     * @throws NullPointerException {@code coordinates} or {@code facingDirection}  is NULL
      */
     public boolean place(Coordinates coordinates, Direction facingDirection) {
         checkNotNull(coordinates, "coordinates must not be null");
@@ -96,15 +99,16 @@ public class Robot {
     }
 
     /**
-     * Reports current robot coordinates and facing direction.
-     *
-     * @return coordinates and facing direction formatted as {@code "X,Y,DIRECTION"} (i.e. {@code "3,10,EAST"})
-     * if the robot is on the table, {@code "Not placed on the table yet"} otherwise
+     * Reports current coordinates and facing direction formatted as {@code "X,Y,DIRECTION"}
+     * (i.e. {@code "3,10,EAST"}) if the robot is on the table, {@code "Not placed on the table yet"} otherwise.
+     * Report destination/output is specified by implementation of {@link ReportWriter} configured with the instance
+     * of this robot.
      */
-    public String report() {
-        return placedOnTheTable()
+    public void report() {
+        String report = placedOnTheTable()
                 ? String.format("%d,%d,%s", coordinates.getX(), coordinates.getY(), facingDirection)
                 : "Not placed on the table yet";
+        reportWriter.write(report);
     }
 
     private boolean placedOnTheTable() {

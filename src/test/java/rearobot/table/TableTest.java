@@ -24,11 +24,11 @@ public class TableTest {
     @Test
     public void shouldContainCoordinatesDefinedByDimensions() {
         Table tableTop = new Table(5, 5);
-        assertThat(tableTop.contains(new Coordinates(1, 1)), is(true));
-        assertThat(tableTop.contains(new Coordinates(5, 5)), is(true));
-        assertThat(tableTop.contains(new Coordinates(1, 5)), is(true));
-        assertThat(tableTop.contains(new Coordinates(5, 1)), is(true));
-        assertThat(tableTop.contains(new Coordinates(2, 3)), is(true));
+        assertThat(tableTop.contains(new Coordinates(0, 0)), is(true));
+        assertThat(tableTop.contains(new Coordinates(4, 4)), is(true));
+        assertThat(tableTop.contains(new Coordinates(0, 4)), is(true));
+        assertThat(tableTop.contains(new Coordinates(4, 0)), is(true));
+        assertThat(tableTop.contains(new Coordinates(2, 1)), is(true));
     }
 
     @Test
@@ -36,7 +36,6 @@ public class TableTest {
         Table tableTop = new Table(3, 6);
         assertThat(tableTop.contains(new Coordinates(1, 7)), is(false));
         assertThat(tableTop.contains(new Coordinates(6, 3)), is(false));
-        assertThat(tableTop.contains(new Coordinates(0, 0)), is(false));
         assertThat(tableTop.contains(new Coordinates(-1, 2)), is(false));
         assertThat(tableTop.contains(new Coordinates(2, -1)), is(false));
     }

@@ -47,4 +47,9 @@ public class Coordinates {
                 throw new IllegalArgumentException("unknown orientation: " + direction);
         }
     }
+
+    @Override
+    public String toString() {
+        return "[" + x + "," + y + "]";
+    }
 }
