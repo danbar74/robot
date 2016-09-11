@@ -71,7 +71,7 @@ public class Application {
         }
         try {
             Files.lines(path, StandardCharsets.UTF_8)
-                    .filter(line -> line.trim().isEmpty())
+                    .filter(line -> !line.trim().isEmpty())
                     .forEach(line -> {
                         try {
                             CommandDefinitionParser.parse(line).apply(robot);
